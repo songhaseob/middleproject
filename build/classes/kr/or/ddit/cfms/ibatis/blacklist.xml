@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+	<sqlMap namespace="blacklist">
+		<select id="getAllblacklist" resultClass="BlacklistVO">
+			SELECT * FROM blacklist 
+		</select>
+		
+		<select id="getBlacklist" resultClass="BlacklistVO" parameterClass="String">
+			SELECT * FROM blacklist WHERE list_num = #list_num#
+		</select>
+		
+		<!-- 등록 해버리기 -->
+		<insert id="insertBlacklist" parameterClass="BlacklistVO">
+			INSERT INTO blacklist VALUES (blacklist_seq.nextval, #title#, #writer#, SYSDATE, #cont#, 
+								 #reported_cus#, #cus_id#, #prod_num#)
+		</insert>
+		
+		<!-- 삭제 해버리기 -->
+		<delete id="deleteBlacklist" parameterClass="String">
+			DELETE FROM blacklist WHERE list_num = #list_num#
+		</delete>
+		
+		
+	
+	</sqlMap>
+	
+	
+	

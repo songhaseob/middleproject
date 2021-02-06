@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="buy">
+	<insert id="buyProduct" parameterClass="BuyVO">
+		INSERT INTO BUY VALUES(buy_seq.nextval,SYSDATE,#cus_id#,#pro_num#,#list_num#)
+	</insert>
+	
+	<select id="getAllbuy" resultClass="BuyVO">
+		SELECT * FROM buy ORDER BY buy_cd
+	</select>
+	<!-- 일별 상품구매 -->
+	<select id="getDayBuy" parameterClass="DateVO" resultClass="BuyVO">
+		SELECT * FROM buy 
+		WHERE BUY_DT  >= TO_DATE(#startdate#, 'YYYY-MM-DD') AND CUS_ID = #cus_id#
+		ORDER BY BUY_CD DESC
+	
+	</select>
+	
+	<!-- 주별 상품구매 -->
+	<select id="getWeekBuy" parameterClass="DateVO" resultClass="BuyVO">
+		SELECT * FROM buy WHERE BUY_DT >= TO_DATE(#startdate#, 'YYYY-MM-DD')-7  AND CUS_ID = #cus_id#
+		ORDER BY BUY_CD DESC
+	</select>
+	
+	<!-- 월별 상품구매 -->
+	<select id="getMonthBuy" parameterClass="DateVO" resultClass="BuyVO">
+		SELECT * FROM buy WHERE BUY_DT >= ADD_MONTHS(TO_DATE(#startdate#, 'YYYY-MM-DD'), -1)  AND CUS_ID = #cus_id#
+		ORDER BY BUY_CD DESC
+	</select>
+	
+	<!-- 년별 상품구매 -->
+	<select id="getYearBuy" parameterClass="DateVO" resultClass="BuyVO">
+		SELECT * FROM buy WHERE BUY_DT >= ADD_MONTHS(TO_DATE(#startdate#, 'YYYY-MM-DD'), -12)  AND CUS_ID = #cus_id#
+		ORDER BY BUY_CD DESC
+	</select>
+	
+	<!-- 기간별 상품구매 -->
+	<select id="termBuyList" parameterClass="DateVO" resultClass="BuyVO">
+		SELECT * FROM buy
+		WHERE BUY_DT BETWEEN TO_DATE(#startdate#, 'YYYY-MM-DD') AND TO_DATE(#enddate#, 'YYYY-MM-DD')+1 AND CUS_ID = #cus_id#
+		ORDER BY BUY_CD DESC
+	</select>
+	
+	<!-- 총 상품구매 -->
+	<select id="allBuyList" parameterClass="String" resultClass="BuyVO">
+		SELECT * FROM buy
+		WHERE CUS_ID = #cus_id#
+		ORDER BY BUY_CD DESC
+	</select>
+	
+</sqlMap>

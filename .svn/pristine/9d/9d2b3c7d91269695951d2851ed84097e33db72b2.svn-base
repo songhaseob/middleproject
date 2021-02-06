@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/dtd-map-2.dtd">
+
+<sqlMap namespace="customer">
+	<select id="getAllCus" resultClass="CustVO">
+		SELECT * FROM customer
+	</select>
+	
+	<!-- 유저정보 가져오기(수훈) -->
+	<select id="userInfo" resultClass="CustVO" parameterClass="String">
+		SELECT *  FROM customer where cus_id = #cus_id#
+	</select>
+	
+	<!-- 신고횟수 업데이트(수훈) -->
+	<update id="updateCus" parameterClass="String">
+		UPDATE customer SET report_cnt = report_cnt + 1 WHERE cus_id = #cus_id#
+	</update>
+	
+	
+	<!-- 유저 신고횟수 가져오기(선중) -->
+	<select id="userReportInfo" parameterClass="String" resultClass="int">
+		SELECT report_cnt FROM customer WHERE cus_id = #cus_id#
+	</select>
+	<!-- 유저 닉네임 수정하기(수훈) -->
+	<update id="updateCusnick" parameterClass="CustVO">
+		UPDATE customer SET nicknm = #nicknm# WHERE cus_id = #cus_id#
+	</update>
+	<!-- 유저 비밀번호 수정하기(수훈) -->
+	<update id="updateCuspass" parameterClass="CustVO">
+		UPDATE customer SET pass = #pass# WHERE cus_id = #cus_id#
+	</update>
+	<!-- 유저 이메일 수정하기 (수훈)-->
+	<update id="updateCusmail" parameterClass="CustVO">
+		UPDATE customer SET email = #email# WHERE cus_id = #cus_id#
+	</update>
+	
+	<!-- 회원 탈퇴시켜버리기 (수훈) -->
+	<delete id="deleteCus" parameterClass="String">
+		DELETE FROM customer WHERE cus_id=#cud_id#
+	</delete>
+	
+	
+</sqlMap>

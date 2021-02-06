@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+	
+<sqlMap namespace="boardlist">
+	<select id="getAllBoardlist" resultClass="BoardlistVO">
+		SELECT * FROM BOARDLIST ORDER BY list_num DESC
+	</select>
+	
+	<select id="getDetailBoardlist" parameterClass="BoardlistVO"  resultClass="BoardlistVO">
+		SELECT * FROM BOARDLIST WHERE list_num = #list_num#
+	</select>
+	
+	<update id="updateBoard" parameterClass="BoardlistVO">
+  		 	UPDATE BOARDLIST SET LIST_NUM = #list_num#, title = #title#, cont = #cont#, wr_dt = sysdate WHERE list_num = #list_num#
+  	</update>
+  	<delete id="deleteBoard" parameterClass="int">
+  			delete from BOARDLIST where list_num = #list_num#
+  	</delete>
+  	
+   <insert id="insertBoard" parameterClass="BoardlistVO">
+            INSERT INTO  
+                      BOARDLIST (LIST_NUM,
+                                 BD_NUM,
+                                 BD_CD,
+                                 TITLE,
+                                 WR_DT,
+                                 CONT,
+                                 WRITER,
+                                 CUS_ID,
+                                 CLASSIFY)
+                      VALUES(
+                      notice_seq.nextval,
+                       1,
+                       1,
+                       #title#,
+                       SYSDATE,
+                       #cont#,
+                       '관리자(M)',
+                       'admin',
+                       '공지사항'
+                       
+                      )
+                      
+     </insert>
+     
+      <insert id="insertFaqBoard" parameterClass="BoardlistVO">
+               INSERT INTO  
+                      BOARDLIST (LIST_NUM,
+                                 BD_NUM,
+                                 BD_CD,
+                                 TITLE,
+                                 WR_DT,
+                                 CONT,
+                                 WRITER,
+                                 CUS_ID,
+                                 CLASSIFY)
+                      VALUES(
+                      faq_seq.nextval,
+                       1,
+                       2,
+                       #title#,
+                       SYSDATE,
+                       #cont#,
+                       '관리자(M)',
+                       'admin',
+                       'FAQ'
+                       
+                      )
+
+                      
+     </insert>
+     
+  		
+</sqlMap>	
+	
+	

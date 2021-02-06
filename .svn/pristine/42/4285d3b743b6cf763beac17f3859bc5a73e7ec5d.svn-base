@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+encoding//WebContent/board/findId.jsp=UTF-8
+encoding//WebContent/css/all.min.css=UTF-8
+encoding//WebContent/css/mainbbbb.css=UTF-8
+encoding//res/dbinfo.properties=UTF-8
+encoding//res/log4j.properties=UTF-8
+encoding//src/kr/or/ddit/cfms/contoller/MainPage.java=UTF-8
+encoding//src/kr/or/ddit/cfms/contoller/ProductRegistration.java=UTF-8
+encoding//src/kr/or/ddit/cfms/contoller/ProductView.java=UTF-8
+encoding//src/kr/or/ddit/cfms/contoller/SearchDate.java=UTF-8
+encoding//src/kr/or/ddit/cfms/contoller/SessionLoginServlet.java=UTF-8
+encoding//src/kr/or/ddit/cfms/dao/CFMSDaoImpl.java=UTF-8
+encoding//src/kr/or/ddit/cfms/dao/ICFMSDao.java=UTF-8
+encoding//src/kr/or/ddit/cfms/service/CFMSServiceImpl.java=UTF-8
+encoding//src/kr/or/ddit/cfms/service/ICFMSService.java=UTF-8
+encoding/src=UTF-8

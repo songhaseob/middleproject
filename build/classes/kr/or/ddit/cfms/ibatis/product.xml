@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/dtd-map-2.dtd">
+
+<sqlMap namespace="product">
+	<insert id="insertProduct" parameterClass="ProVO">
+		INSERT INTO PRODUCT
+		VALUES((SELECT NVL(MAX(LIST_NUM),0)+1 FROM PRODUCT),(SELECT NVL(MAX(LIST_NUM),0)+1 FROM PRODUCT),#cus_id#,#pro_cg#,
+		#brand#,#pro_nm#,#pro_pr#,#ret_pr#)
+	</insert>
+	
+	<select id="checkProductNum" resultClass="int">
+		SELECT NVL(MAX(LIST_NUM),0) FROM PRODUCT 
+	</select>
+	
+	
+	<select id="getAllProdList" resultClass="ProVO">
+		SELECT * FROM PRODUCT ORDER BY PRO_NUM DESC
+	</select>
+	
+	<select id="getProduct" parameterClass="int" resultClass="ProVO">
+		SELECT * FROM PRODUCT WHERE pro_num=#pro_num#
+	</select>
+	
+	<select id="categoryProduct" parameterClass="CateVO" resultClass="ProVO">
+		SELECT * FROM PRODUCT WHERE PRO_CG IN ($categoey$) AND BRAND IN($brand$)
+		ORDER BY LIST_NUM
+	</select>
+	
+	<select id="searchProduct" parameterClass="String" resultClass="ProVO">
+		SELECT *  FROM PRODUCT
+		WHERE pro_nm LIKE '%'||#search#||'%'
+		ORDER BY LIST_NUM
+	</select>
+	
+	<select id="getProdbynum" parameterClass="int" resultClass="ProVO">
+		SELECT * FROM PRODUCT WHERE list_num=#list_num#
+		ORDER BY LIST_NUM
+	</select>
+	<!-- 구매상품조회 -->
+	<select id="getPaymentProd" parameterClass="String" resultClass="ProVO">
+		SELECT * FROM PRODUCT WHERE PRO_NUM IN ($date$)
+		ORDER BY PRO_NUM DESC
+	</select>
+	
+	<!-- 상품게시글 수정(선중) -->
+	<update id="updateProdlist" parameterClass="ProVO">
+		UPDATE PRODUCT SET PRO_CG = #pro_cg#, BRAND = #brand#, PRO_NM = #pro_nm#, PRO_PR=#pro_pr#,RET_PR=#ret_pr#
+		WHERE PRO_NUM = #pro_num#
+	</update>
+	
+	
+</sqlMap>

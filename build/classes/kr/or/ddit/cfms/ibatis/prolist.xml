@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/dtd-map-2.dtd">
+
+<sqlMap namespace="prolist">
+	<insert id="insertProlist" parameterClass="listVO">
+		INSERT INTO PROLIST
+		VALUES((SELECT NVL(MAX(LIST_NUM),0)+1 FROM prolist),#cus_id#,SYSDATE,#cont#,#writer#,
+		'판매중')
+	</insert>
+	
+	<select id="getAllProList" resultClass="listVO">
+		SELECT * FROM PROLIST ORDER BY LIST_NUM DESC
+	</select>
+	
+	<select id="getProList" parameterClass="int" resultClass="listVO">
+		SELECT * FROM PROLIST WHERE list_num=#list_num#
+	</select>
+	
+	<update id="sellProductChange" parameterClass="int">
+		UPDATE PROLIST SET SEL_CHECK = '판매완료' WHERE list_num=#list_num#
+	</update>
+	
+	
+	<select id="categoryProlist" parameterClass="CateVO" resultClass="listVO">
+		SELECT PROLIST.list_num,PROLIST.cus_id,PROLIST.wr_dt,cont,PROLIST.writer,sel_check FROM PRODUCT, PROLIST 
+		WHERE PRODUCT.list_num = PROLIST.list_num AND
+		PRO_CG IN ($categoey$) AND BRAND IN($brand$)
+		ORDER BY LIST_NUM
+	</select>
+	
+	
+	<select id="searchProlist" parameterClass="String" resultClass="listVO">
+		SELECT PROLIST.list_num,PROLIST.cus_id,PROLIST.wr_dt,cont,PROLIST.writer,sel_check FROM PRODUCT, PROLIST 
+		WHERE PRODUCT.list_num = PROLIST.list_num AND
+		pro_nm LIKE '%'||#search#||'%'
+		ORDER BY LIST_NUM
+	</select>
+	
+	<!-- 상품게시글 삭제(선중) -->
+	<delete id="deleteProlist" parameterClass="int">
+		DELETE PROLIST WHERE list_num = #list_num#
+	</delete>
+	
+	<!-- 상품게시글 수정(선중) -->
+	<update id="updateProlist" parameterClass="listVO">
+		UPDATE PROLIST SET WR_DT=SYSDATE,CONT=#cont# WHERE LIST_NUM = #list_num#
+	</update>
+	
+	
+</sqlMap>

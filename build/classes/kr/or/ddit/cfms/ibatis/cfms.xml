@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="cfms">
+	<insert id="insertPoint" parameterClass="CharVO">
+		INSERT INTO CHARGE
+		VALUES(charge_seq.nextval,SYSDATE,#cha_pr#,#cus_id#)
+	</insert>
+	
+	<update id = "updatePoint" parameterClass="CharVO">
+		UPDATE CUSTOMER SET POINT = POINT +#cha_pr# WHERE cus_id = #cus_id#
+	</update>
+	<!-- 구매내역불러오기(선중) -->
+	<select id="myPointInfo" parameterClass="String" resultClass="CharVO">
+		SELECT * FROM CHARGE WHERE cus_id = #cus_id#
+		ORDER BY CHA_NO DESC
+	</select>
+	<!-- 일별 구매내역 조회(선중) -->
+	<select id="dayChargeList" parameterClass="DateVO" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= TO_DATE(#startdate#, 'YYYY-MM-DD') AND cus_id = #cus_id#
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 주별 구매내역 조회(선중) -->
+	<select id="weekChargeList" parameterClass="DateVO" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= TO_DATE(#startdate#, 'YYYY-MM-DD')-7 AND cus_id = #cus_id#
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 월별 구매내역 조회(선중) -->
+	<select id="monthChargeList" parameterClass="DateVO" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= ADD_MONTHS(TO_DATE(#startdate#, 'YYYY-MM-DD'), -1) AND cus_id = #cus_id#
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 년별 구매내역 조회(선중) -->
+	<select id="yearChargeList" parameterClass="DateVO" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= ADD_MONTHS(TO_DATE(#startdate#, 'YYYY-MM-DD'), -12) AND cus_id = #cus_id#
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 기간별 구매내역 조회(선중) -->
+	<select id="termChargeList" parameterClass="DateVO" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt BETWEEN TO_DATE(#startdate#, 'YYYY-MM-DD') AND TO_DATE(#enddate#, 'YYYY-MM-DD')+1 AND cus_id = #cus_id#
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	
+	<!--로그인(경찬)-->
+	<select id="loginid" resultClass="CustVO" parameterClass="CustVO">
+		select *  from CUSTOMER where CUS_ID = #cus_id# and PASS = #pass#
+	</select>
+	
+	<!--아이디 중복검사(경찬)-->
+	<select id="cusId" parameterClass="string" resultClass="string">
+		select CUS_ID from CUSTOMER where CUS_ID=#data#
+	</select>
+	
+	<!-- 아이디 찾기할때 필요한 메일가져오기 (경찬)-->
+	<select id="findId" parameterClass="string" resultClass="string">
+		select CUS_ID from CUSTOMER where email=#data#
+	</select>
+	
+	<!-- 비밀번호 찾기 할때 필요한거 (경찬)-->
+	<select id="findPass" parameterClass="CustVO" resultClass="string">
+		select pass from CUSTOMER where email=#email# and CUS_ID=#cus_id#
+	</select>
+	
+	<!-- 비밀번호 찾기할때 힌트로 하는거 (경찬) -->
+	<select id="findPass2" parameterClass="CustVO" resultClass="string">
+		select pass from customer where cus_id=#cus_id# and pass_hint=#pass_hint# and DBMS_LOB.INSTR(answer,#answer#,1,1)>0
+	</select>
+	
+	<!--닉네임 중복검사(경찬)-->
+	<select id="cusNick" parameterClass="string" resultClass="string">
+		select NICKNM from CUSTOMER where NICKNM=#data#
+	</select>
+	
+	<!-- 임시비밀번호로 업데이트하는거(경찬) -->
+	<update id="upPass" parameterClass="CustVO">
+		UPDATE CUSTOMER SET pass = #pass# WHERE cus_id = #cus_id#
+	</update> 
+	
+	<!-- 	회원가입 정보 입력(경찬) -->
+	<insert id="insertUser" parameterClass="CustVO">
+	insert into CUSTOMER VALUES(#cus_id#,#pass#,#nicknm#,#tel#,#email#,0,#pass_hint#,#answer#,0,0)
+	</insert>
+	
+	
+	<!-- 유저정보 가져오기(선중) -->
+	<select id="userInfo" resultClass="CustVO" parameterClass="String">
+		select *  from CUSTOMER where CUS_ID = #cus_id#
+	</select>
+	
+	<!-- 구매유저 포인트감소(선중) -->
+	<update id="buyPoint" parameterClass="CustVO">
+		UPDATE CUSTOMER SET POINT = POINT -#point# WHERE cus_id = #cus_id#
+	</update>
+	<!-- 판매유저 포인트감소(선중) -->
+	<update id="selPoint" parameterClass="CustVO">
+		UPDATE CUSTOMER SET POINT = POINT +#point# WHERE cus_id = #cus_id#
+	</update>
+	
+	
+	<!-- 관리자 일별 구매내역 조회(선중) -->
+	<select id="adminDayChargeList" parameterClass="String" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= TO_DATE(#today#, 'YYYY-MM-DD')
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 관리자 주별 구매내역 조회(선중) -->
+	<select id="adminWeekChargeList" parameterClass="String" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= TO_DATE(#today#, 'YYYY-MM-DD')-7
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 관리자 월별 구매내역 조회(선중) -->
+	<select id="adminMonthChargeList" parameterClass="String" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= ADD_MONTHS(TO_DATE(#today#, 'YYYY-MM-DD'), -1)
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 관리자 년별 구매내역 조회(선중) -->
+	<select id="adminYearChargeList" parameterClass="String" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt >= ADD_MONTHS(TO_DATE(#today#, 'YYYY-MM-DD'), -12)
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 관리자 기간별 구매내역 조회(선중) -->
+	<select id="adminTermChargeList" parameterClass="DateVO" resultClass="CharVO">
+		SELECT * FROM charge
+		WHERE cha_dt BETWEEN TO_DATE(#startdate#, 'YYYY-MM-DD') AND TO_DATE(#enddate#, 'YYYY-MM-DD')+1
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	<!-- 관리자 총 구매내역 조회(선중) -->
+	<select id="adminAllChargeList" resultClass="CharVO">
+		SELECT * FROM charge
+		ORDER BY CHA_NO DESC
+	</select>
+	
+	
+	
+	
+</sqlMap>

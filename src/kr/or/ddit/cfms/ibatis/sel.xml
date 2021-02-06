@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+	PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+	"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="sel">
+	<insert id="selProduct" parameterClass="SelVO">
+		INSERT INTO SEL VALUES(sel_seq.nextval,SYSDATE,#pro_num#,#cus_id#,#list_num#)
+	</insert>
+	
+	
+	<!-- 일별 상품판매 -->
+	<select id="getDaySel" parameterClass="DateVO" resultClass="SelVO">
+		SELECT * FROM sel WHERE SEL_DT >= TO_DATE(#startdate#, 'YYYY-MM-DD')  AND CUS_ID = #cus_id#
+		ORDER BY SEL_CD DESC
+	</select>
+	
+	<!-- 주별 상품판매 -->
+	<select id="getWeekSel" parameterClass="DateVO" resultClass="SelVO">
+		SELECT * FROM sel WHERE SEL_DT >= TO_DATE(#startdate#, 'YYYY-MM-DD')-7  AND CUS_ID = #cus_id#
+		ORDER BY SEL_CD DESC
+	</select>
+	
+	<!-- 월별 상품판매 -->
+	<select id="getMonthSel" parameterClass="DateVO" resultClass="SelVO">
+		SELECT * FROM sel WHERE SEL_DT >= ADD_MONTHS(TO_DATE(#startdate#, 'YYYY-MM-DD'), -1)  AND CUS_ID = #cus_id#
+		ORDER BY SEL_CD DESC
+	</select>
+	
+	<!-- 년별 상품판매 -->
+	<select id="getYearSel" parameterClass="DateVO" resultClass="SelVO">
+		SELECT * FROM sel WHERE SEL_DT >= ADD_MONTHS(TO_DATE(#startdate#, 'YYYY-MM-DD'), -12)  AND CUS_ID = #cus_id#
+		ORDER BY SEL_CD DESC
+	</select>
+	
+	<!-- 기간별 상품판매 -->
+	<select id="termSelList" parameterClass="DateVO" resultClass="SelVO">
+		SELECT * FROM sel
+		WHERE SEL_DT BETWEEN TO_DATE(#startdate#, 'YYYY-MM-DD') AND TO_DATE(#enddate#, 'YYYY-MM-DD')+1  AND CUS_ID = #cus_id#
+		ORDER BY SEL_CD DESC
+	</select>
+	
+	<!-- 유저 판매 건수 -->
+	<select id="userSelInfo" parameterClass="String" resultClass="int">
+		SELECT COUNT(*) FROM SEL WHERE cus_id = #cus_id#
+	</select>
+	
+	<!-- 총 상품판매 -->
+	<select id="allSelList" parameterClass="String" resultClass="SelVO">
+		SELECT * FROM sel
+		WHERE CUS_ID = #cus_id#
+		ORDER BY SEL_CD DESC
+	</select>
+	
+	
+</sqlMap>
